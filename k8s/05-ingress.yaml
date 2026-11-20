@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: id-037
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: www.id-037.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-api
+                port:
+                  number: 80
+          - path: /about
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-about
+                port:
+                  number: 80
+          - path: /research
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-research
+                port:
+                  number: 80
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-research
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-about
+                port:
+                  number: 80
+    - host: admin.id-037.com
+      http:
+        paths:
+          - path: /edit
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-research
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-research
+                port:
+                  number: 80

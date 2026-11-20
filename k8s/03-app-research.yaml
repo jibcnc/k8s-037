@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-research
+  namespace: id-037
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-research
+  template:
+    metadata:
+      labels:
+        app: app-research
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k8s-worker1
+      containers:
+        - name: app-research
+          image: localhost/app-research:037
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 5000
+          volumeMounts:
+            - name: research-data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+      volumes:
+        - name: research-data
+          persistentVolumeClaim:
+            claimName: research-pvc-037
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-research
+  namespace: id-037
+spec:
+  type: ClusterIP
+  selector:
+    app: app-research
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      protocol: TCP

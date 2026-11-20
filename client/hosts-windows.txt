@@ -1,0 +1,2 @@
+# เพิ่มบรรทัดนี้ใน C:\Windows\System32\drivers\etc\hosts (เปิด Notepad แบบ Run as administrator)
+172.25.1.183  www.id-037.com admin.id-037.com
